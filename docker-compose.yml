@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "YourStrong!Password123"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrong!Password123", "-Q", "SELECT 1", "-C"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    networks:
+      - webapinetwork
+
+  api:
+    image: ${DOCKER_REGISTRY-}elevator-api
+    build:
+      context: .
+      dockerfile: ExamWebApi/Dockerfile
+    container_name: api
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=SocialCultureDb;User Id=sa;Password=YourStrong!Password123;TrustServerCertificate=true
+    ports:
+      - "5000:8080"
+    networks:
+      - webapinetwork
+    restart: on-failure
+
+networks:
+  webapinetwork:
+    driver: bridge
+
+volumes:
+  sql_data:
