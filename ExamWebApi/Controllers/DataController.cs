@@ -2,6 +2,7 @@
 using ExamWebApi.DTOs;
 using ExamWebApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExamWebApi.Controllers;
@@ -10,13 +11,12 @@ namespace ExamWebApi.Controllers;
 [Route("api/[controller]")]
 public class DataController(AppDbContext _context) : ControllerBase {
     [HttpGet("building")]
-    public async Task<ActionResult<IEnumerable<Building>>> GetBuildings() {
-        var buildings = await _context.Buildings
-        .Include(x => x.Elevators)
-        .Select(b => new BuildingResponseDto {
-            Adress = b.Adress,
-            TotalFloors = b.TotalFloors,
-            Elevators = b.Elevators.Select(e => new ElevatorResponseDto {
+    public async Task<ActionResult<IEnumerable<BuildingResponseDto>>> GetBuildings() => Ok(await _context.Buildings.Include(x => x.Elevators)
+        .Select(x => new BuildingResponseDto {
+            Id = x.Id,
+            Adress = x.Adress,
+            TotalFloors = x.TotalFloors,
+            Elevators = x.Elevators.Select(e => new ElevatorResponseDto {
                 SerialNumber = e.SerialNumber,
                 ModelID = e.ModelID,
                 ProductionDate = e.ProductionDate,
@@ -26,11 +26,40 @@ public class DataController(AppDbContext _context) : ControllerBase {
                 Status = e.Status
             }).ToList()
         })
-        .ToListAsync();
-
-        return Ok(buildings);
-    }
+        .AsSplitQuery()
+        .ToListAsync());
 
     [HttpGet("elevator")]
-    public async Task<ActionResult<IEnumerable<Building>>> GetElevators() => Ok(await _context.Elevators.Include(x => x.FloorCalls).Include(x => x.TripLogs).ToListAsync());
+    public async Task<ActionResult<IEnumerable<Building>>> GetElevators() => Ok(await _context.Elevators
+        .Include(x => x.Building)
+        .Include(x => x.FloorCalls)
+        .Include(x => x.TripLogs)
+        .Select(x => new ElevatorAnaliticResponseDto {
+            SerialNumber = x.SerialNumber,
+            ModelID = x.ModelID,
+            ProductionDate = x.ProductionDate,
+            MinFloor = x.MinFloor,
+            MaxFloor = x.MaxFloor,
+            MoveSpeed = x.MoveSpeed,
+            Status = x.Status,
+            Building = new BuildingDto {
+                Adress = x.Building.Adress,
+                TotalFloors = x.Building.TotalFloors
+            },
+            FloorCalls = x.FloorCalls.Select(f => new FloorCallDto {
+                Id = f.Id,
+                CurrentFloor = f.CurrentFloor,
+                Course = f.Course,
+                Timestamp = f.Timestamp
+            }).ToList(),
+            TripLogs = x.TripLogs.Select(t => new TripLogDto {
+                Id = t.Id,
+                Description = t.Description,
+                DistanceTraveled = t.DistanceTraveled,
+                TotalSeconds = t.TotalSeconds,
+                Timestamp = t.Timestamp
+            }).ToList()
+        })
+        .AsSplitQuery()
+        .ToListAsync());
 }

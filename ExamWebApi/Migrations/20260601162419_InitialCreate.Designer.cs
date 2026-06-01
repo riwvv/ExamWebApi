@@ -4,6 +4,7 @@ using ExamWebApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExamWebApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260601162419_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,7 +100,7 @@ namespace ExamWebApi.Migrations
                     b.Property<int>("CurrentFloor")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ElevatorId")
+                    b.Property<Guid?>("ElevatorSerialNumber")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Timestamp")
@@ -105,7 +108,7 @@ namespace ExamWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ElevatorId");
+                    b.HasIndex("ElevatorSerialNumber");
 
                     b.HasIndex("Timestamp");
 
@@ -127,7 +130,7 @@ namespace ExamWebApi.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("ElevatorId")
+                    b.Property<Guid?>("ElevatorSerialNumber")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Timestamp")
@@ -140,7 +143,7 @@ namespace ExamWebApi.Migrations
 
                     b.HasIndex("Description");
 
-                    b.HasIndex("ElevatorId");
+                    b.HasIndex("ElevatorSerialNumber");
 
                     b.HasIndex("Timestamp");
 
@@ -162,9 +165,8 @@ namespace ExamWebApi.Migrations
                 {
                     b.HasOne("ExamWebApi.Models.Elevator", "Elevator")
                         .WithMany("FloorCalls")
-                        .HasForeignKey("ElevatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ElevatorSerialNumber")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Elevator");
                 });
@@ -173,9 +175,8 @@ namespace ExamWebApi.Migrations
                 {
                     b.HasOne("ExamWebApi.Models.Elevator", "Elevator")
                         .WithMany("TripLogs")
-                        .HasForeignKey("ElevatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ElevatorSerialNumber")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Elevator");
                 });

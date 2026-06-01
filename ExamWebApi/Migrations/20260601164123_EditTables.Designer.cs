@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExamWebApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260601124013_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260601164123_EditTables")]
+    partial class EditTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,14 +27,19 @@ namespace ExamWebApi.Migrations
 
             modelBuilder.Entity("ExamWebApi.Models.Building", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Adress")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("TotalFloors")
                         .HasColumnType("int");
 
-                    b.HasKey("Adress");
+                    b.HasKey("Id");
 
                     b.HasIndex("TotalFloors");
 
@@ -47,8 +52,8 @@ namespace ExamWebApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("BuildingAdress")
-                        .HasColumnType("nvarchar(150)");
+                    b.Property<Guid>("BuildingId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("MaxFloor")
                         .HasColumnType("int");
@@ -58,8 +63,8 @@ namespace ExamWebApi.Migrations
 
                     b.Property<string>("ModelID")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("MoveSpeed")
                         .HasPrecision(18, 2)
@@ -75,7 +80,7 @@ namespace ExamWebApi.Migrations
 
                     b.HasKey("SerialNumber");
 
-                    b.HasIndex("BuildingAdress");
+                    b.HasIndex("BuildingId");
 
                     b.HasIndex("ModelID");
 
@@ -95,7 +100,7 @@ namespace ExamWebApi.Migrations
                     b.Property<int>("CurrentFloor")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ElevatorSerialNumber")
+                    b.Property<Guid>("ElevatorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Timestamp")
@@ -103,7 +108,7 @@ namespace ExamWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ElevatorSerialNumber");
+                    b.HasIndex("ElevatorId");
 
                     b.HasIndex("Timestamp");
 
@@ -125,7 +130,7 @@ namespace ExamWebApi.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("ElevatorSerialNumber")
+                    b.Property<Guid>("ElevatorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Timestamp")
@@ -138,7 +143,7 @@ namespace ExamWebApi.Migrations
 
                     b.HasIndex("Description");
 
-                    b.HasIndex("ElevatorSerialNumber");
+                    b.HasIndex("ElevatorId");
 
                     b.HasIndex("Timestamp");
 
@@ -149,8 +154,9 @@ namespace ExamWebApi.Migrations
                 {
                     b.HasOne("ExamWebApi.Models.Building", "Building")
                         .WithMany("Elevators")
-                        .HasForeignKey("BuildingAdress")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Building");
                 });
@@ -159,8 +165,9 @@ namespace ExamWebApi.Migrations
                 {
                     b.HasOne("ExamWebApi.Models.Elevator", "Elevator")
                         .WithMany("FloorCalls")
-                        .HasForeignKey("ElevatorSerialNumber")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ElevatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Elevator");
                 });
@@ -169,8 +176,9 @@ namespace ExamWebApi.Migrations
                 {
                     b.HasOne("ExamWebApi.Models.Elevator", "Elevator")
                         .WithMany("TripLogs")
-                        .HasForeignKey("ElevatorSerialNumber")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ElevatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Elevator");
                 });

@@ -1,11 +1,9 @@
 ﻿#nullable disable
-namespace ExamWebApi.Models;
+namespace ExamWebApi.DTOs;
 
-public class FloorCall {
+public class FloorCallDto {
     public Guid Id { get; set; }
     public int CurrentFloor { get; set; }
     public string Course { get; set; } = string.Empty;
     public DateTime Timestamp { get; set; }
-    public Guid ElevatorId { get; set; }
-    public Elevator Elevator { get; set; } = null;
 }

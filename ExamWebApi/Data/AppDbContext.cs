@@ -12,10 +12,12 @@ public class AppDbContext : DbContext {
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.Entity<Building>(entity => {
-            entity.HasKey(x => x.Adress);
+            entity.HasKey(b => b.Id);
 
-            entity.Property(x => x.Adress).HasMaxLength(150);
+            entity.Property(b => b.Adress).IsRequired().HasMaxLength(100);
             entity.Property(x => x.TotalFloors).IsRequired();
+
+            entity.HasMany(x => x.Elevators).WithOne(c => c.Building).HasForeignKey(c => c.BuildingId).OnDelete(DeleteBehavior.Cascade);
 
             entity.HasIndex(x => x.TotalFloors);
         });
@@ -23,14 +25,16 @@ public class AppDbContext : DbContext {
         modelBuilder.Entity<Elevator>(entity => {
             entity.HasKey(x => x.SerialNumber);
 
-            entity.Property(x => x.ModelID).HasMaxLength(200).IsRequired();
+            entity.Property(x => x.ModelID).HasMaxLength(50).IsRequired();
             entity.Property(x => x.ProductionDate).IsRequired();
             entity.Property(x => x.MinFloor).IsRequired();
             entity.Property(x => x.MaxFloor).IsRequired();
             entity.Property(x => x.MoveSpeed).HasPrecision(18, 2).IsRequired();
             entity.Property(x => x.Status).HasMaxLength(11).IsRequired();
 
-            entity.HasOne(x => x.Building).WithMany(x => x.Elevators).OnDelete(DeleteBehavior.Cascade);
+            entity.HasMany(x => x.FloorCalls).WithOne(c => c.Elevator).HasForeignKey(c => c.ElevatorId).OnDelete(DeleteBehavior.Cascade);
+            entity.HasMany(x => x.TripLogs).WithOne(c => c.Elevator).HasForeignKey(c => c.ElevatorId).OnDelete(DeleteBehavior.Cascade);
+
             entity.HasIndex(x => x.ModelID);
         });
 
@@ -41,7 +45,6 @@ public class AppDbContext : DbContext {
             entity.Property(x => x.Course).HasMaxLength(4);
             entity.Property(x => x.Timestamp).IsRequired();
 
-            entity.HasOne(x => x.Elevator).WithMany(x => x.FloorCalls).OnDelete(DeleteBehavior.Cascade);
             entity.HasIndex(x => x.Timestamp);
         });
 
@@ -53,7 +56,6 @@ public class AppDbContext : DbContext {
             entity.Property(x => x.TotalSeconds).IsRequired();
             entity.Property(x => x.Timestamp).IsRequired();
 
-            entity.HasOne(x => x.Elevator).WithMany(x => x.TripLogs).OnDelete(DeleteBehavior.Cascade);
             entity.HasIndex(x => x.Description);
             entity.HasIndex(x => x.Timestamp);
         });

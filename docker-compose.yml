@@ -33,7 +33,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=SocialCultureDb;User Id=sa;Password=YourStrong!Password123;TrustServerCertificate=true
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=ElevatorApi;User Id=sa;Password=YourStrong!Password123;TrustServerCertificate=true
     ports:
       - "5000:8080"
     networks:

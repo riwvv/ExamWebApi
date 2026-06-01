@@ -15,12 +15,13 @@ namespace ExamWebApi.Migrations
                 name: "Buildings",
                 columns: table => new
                 {
-                    Adress = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Adress = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     TotalFloors = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Buildings", x => x.Adress);
+                    table.PrimaryKey("PK_Buildings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -28,22 +29,22 @@ namespace ExamWebApi.Migrations
                 columns: table => new
                 {
                     SerialNumber = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModelID = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    ModelID = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ProductionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     MinFloor = table.Column<int>(type: "int", nullable: false),
                     MaxFloor = table.Column<int>(type: "int", nullable: false),
                     MoveSpeed = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Status = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
-                    BuildingAdress = table.Column<string>(type: "nvarchar(150)", nullable: true)
+                    BuildingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Elevators", x => x.SerialNumber);
                     table.ForeignKey(
-                        name: "FK_Elevators_Buildings_BuildingAdress",
-                        column: x => x.BuildingAdress,
+                        name: "FK_Elevators_Buildings_BuildingId",
+                        column: x => x.BuildingId,
                         principalTable: "Buildings",
-                        principalColumn: "Adress",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -96,9 +97,9 @@ namespace ExamWebApi.Migrations
                 column: "TotalFloors");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Elevators_BuildingAdress",
+                name: "IX_Elevators_BuildingId",
                 table: "Elevators",
-                column: "BuildingAdress");
+                column: "BuildingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Elevators_ModelID",
