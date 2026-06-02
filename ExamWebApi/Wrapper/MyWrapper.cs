@@ -25,7 +25,7 @@ public static class MyWrapper {
             return false;
         }
 
-        var res = values.Where(x => x.MinFloor >= desired && x.MaxFloor <= desired && x.CurrentFloor > desired && (x.MoveStatus == "down" || x.MoveStatus == "idle"));
+        var res = values.Where(x => x.MinFloor <= desired && x.MaxFloor >= desired && x.CurrentFloor > desired && (x.MoveStatus == "down" || x.MoveStatus == "idle"));
         if (res == null) {
             result = default;
             return false;
@@ -41,7 +41,7 @@ public static class MyWrapper {
             return false;
         }
 
-        var res = values.Where(x => x.MinFloor >= desired && x.MaxFloor <= desired && x.CurrentFloor < desired && (x.MoveStatus == "up" || x.MoveStatus == "idle"));
+        var res = values.Where(x => x.MinFloor <= desired && x.MaxFloor >= desired && x.CurrentFloor < desired && (x.MoveStatus == "up" || x.MoveStatus == "idle"));
         if (res == null) {
             result = default;
             return false;

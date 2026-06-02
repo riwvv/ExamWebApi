@@ -76,7 +76,10 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
                     var foundAbove = above.First();
 
                     var time = Math.Abs(dto.FloorNumber - foundAbove.CurrentFloor) * 3 / foundAbove.MoveSpeed;
-                    await Task.Delay(Convert.ToInt32(Math.Round(time, MidpointRounding.AwayFromZero)));
+
+                    _logger.LogInformation($"Ожидание началось: {time}мс");
+
+                    await Task.Delay(Convert.ToInt32(Math.Round(time * 1000, 0)));
 
                     var response = new CallResponseDto {
                         ArrivalTime = TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(Convert.ToDouble(time))),
@@ -105,7 +108,10 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
                     _logger.LogInformation($"Найден ближайший лифт сверху: {nearest!.ModelID}");
 
                     var time = Math.Abs(dto.FloorNumber - nearest.CurrentFloor) * 3 / nearest.MoveSpeed;
-                    await Task.Delay(Convert.ToInt32(Math.Round(time, MidpointRounding.AwayFromZero)));
+
+                    _logger.LogInformation($"Ожидание началось: {time}мс");
+
+                    await Task.Delay(Convert.ToInt32(Math.Round(time * 1000, 0)));
 
                     var response = new CallResponseDto {
                         ArrivalTime = TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(Convert.ToDouble(time))),
@@ -136,7 +142,10 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
                     var foundBelow = below.First();
 
                     var time = Math.Abs(dto.FloorNumber - foundBelow.CurrentFloor) * 3 / foundBelow.MoveSpeed;
-                    await Task.Delay(Convert.ToInt32(Math.Round(time, MidpointRounding.AwayFromZero)));
+
+                    _logger.LogInformation($"Ожидание началось: {time}мс");
+
+                    await Task.Delay(Convert.ToInt32(Math.Round(time * 1000, 0)));
 
                     var response = new CallResponseDto {
                         ArrivalTime = TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(Convert.ToDouble(time))),
@@ -165,7 +174,10 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
                     _logger.LogInformation($"Найден ближайший лифт снизу: {nearest!.ModelID}");
 
                     var time = Math.Abs(dto.FloorNumber - nearest.CurrentFloor) * 3 / nearest.MoveSpeed;
-                    await Task.Delay(Convert.ToInt32(Math.Round(time, MidpointRounding.AwayFromZero)));
+
+                    _logger.LogInformation($"Ожидание началось: {time}мс");
+
+                    await Task.Delay(Convert.ToInt32(Math.Round(time * 1000, 0)));
 
                     var response = new CallResponseDto {
                         ArrivalTime = TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(Convert.ToDouble(time))),
