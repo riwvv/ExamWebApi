@@ -1,8 +1,8 @@
-﻿using ExamWebApi.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using ExamWebApi.Data;
 using ExamWebApi.DTOs;
 using ExamWebApi.Models;
 using ExamWebApi.Wrapper;
-using Microsoft.EntityFrameworkCore;
 
 namespace ExamWebApi.Services;
 
@@ -75,9 +75,10 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
 
                     var foundAbove = above.First();
 
-                    var time = Math.Abs(dto.FloorNumber - foundAbove.CurrentFloor) * 3 / foundAbove.MoveSpeed;
+                    var distance = Math.Abs(dto.FloorNumber - foundAbove.CurrentFloor) * 3;
+                    var time = distance / foundAbove.MoveSpeed;
 
-                    _logger.LogInformation($"Ожидание началось: {time}мс");
+                    _logger.LogInformation($"Ожидание началось: {time}с");
 
                     await Task.Delay(Convert.ToInt32(Math.Round(time * 1000, 0)));
 
@@ -92,6 +93,7 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
                     newFloorCall.Elevator = await _context.Elevators.FindAsync(foundAbove.SerialNumber);
 
                     (await _context.Elevators.FindAsync(foundAbove.SerialNumber))!.CurrentFloor = dto.FloorNumber;
+                    (await _context.Elevators.FindAsync(foundAbove.SerialNumber))!.Mileage = time * distance;
                     await _context.FloorCalls.AddAsync(newFloorCall);
                     await _context.SaveChangesAsync();
 
@@ -107,9 +109,10 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
 
                     _logger.LogInformation($"Найден ближайший лифт сверху: {nearest!.ModelID}");
 
-                    var time = Math.Abs(dto.FloorNumber - nearest.CurrentFloor) * 3 / nearest.MoveSpeed;
+                    var distance = Math.Abs(dto.FloorNumber - nearest.CurrentFloor) * 3;
+                    var time = distance / nearest.MoveSpeed;
 
-                    _logger.LogInformation($"Ожидание началось: {time}мс");
+                    _logger.LogInformation($"Ожидание началось: {time}с");
 
                     await Task.Delay(Convert.ToInt32(Math.Round(time * 1000, 0)));
 
@@ -124,6 +127,7 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
                     newFloorCall.Elevator = await _context.Elevators.FindAsync(nearest.SerialNumber);
 
                     (await _context.Elevators.FindAsync(nearest.SerialNumber))!.CurrentFloor = dto.FloorNumber;
+                    (await _context.Elevators.FindAsync(nearest.SerialNumber))!.Mileage = time * distance;
                     await _context.FloorCalls.AddAsync(newFloorCall);
                     await _context.SaveChangesAsync();
 
@@ -141,9 +145,10 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
 
                     var foundBelow = below.First();
 
-                    var time = Math.Abs(dto.FloorNumber - foundBelow.CurrentFloor) * 3 / foundBelow.MoveSpeed;
+                    var distance = Math.Abs(dto.FloorNumber - foundBelow.CurrentFloor) * 3;
+                    var time = distance / foundBelow.MoveSpeed;
 
-                    _logger.LogInformation($"Ожидание началось: {time}мс");
+                    _logger.LogInformation($"Ожидание началось: {time}с");
 
                     await Task.Delay(Convert.ToInt32(Math.Round(time * 1000, 0)));
 
@@ -158,6 +163,7 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
                     newFloorCall.Elevator = await _context.Elevators.FindAsync(foundBelow.SerialNumber);
 
                     (await _context.Elevators.FindAsync(foundBelow.SerialNumber))!.CurrentFloor = dto.FloorNumber;
+                    (await _context.Elevators.FindAsync(foundBelow.SerialNumber))!.Mileage = time * distance;
                     await _context.FloorCalls.AddAsync(newFloorCall);
                     await _context.SaveChangesAsync();
 
@@ -173,9 +179,10 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
 
                     _logger.LogInformation($"Найден ближайший лифт снизу: {nearest!.ModelID}");
 
-                    var time = Math.Abs(dto.FloorNumber - nearest.CurrentFloor) * 3 / nearest.MoveSpeed;
+                    var distance = Math.Abs(dto.FloorNumber - nearest.CurrentFloor) * 3;
+                    var time = distance / nearest.MoveSpeed;
 
-                    _logger.LogInformation($"Ожидание началось: {time}мс");
+                    _logger.LogInformation($"Ожидание началось: {time}с");
 
                     await Task.Delay(Convert.ToInt32(Math.Round(time * 1000, 0)));
 
@@ -190,6 +197,7 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
                     newFloorCall.Elevator = await _context.Elevators.FindAsync(nearest.SerialNumber);
 
                     (await _context.Elevators.FindAsync(nearest.SerialNumber))!.CurrentFloor = dto.FloorNumber;
+                    (await _context.Elevators.FindAsync(nearest.SerialNumber))!.Mileage = time * distance;
                     await _context.FloorCalls.AddAsync(newFloorCall);
                     await _context.SaveChangesAsync();
 

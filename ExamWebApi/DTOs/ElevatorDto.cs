@@ -8,6 +8,7 @@ public class ElevatorDto {
     public int CurrentFloor { get; set; }
     public string MoveStatus { get; set; } = "idle";
     public decimal MoveSpeed { get; set; }
+    public decimal Mileage { get; set; }
     public string Status { get; set; } = "active";
     public string BuildingAdress { get; set; } = string.Empty;
 }

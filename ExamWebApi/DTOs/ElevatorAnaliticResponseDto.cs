@@ -12,6 +12,7 @@ public class ElevatorAnaliticResponseDto {
     public int CurrentFloor { get; set; }
     public string MoveStatus { get; set; } = "idle";
     public decimal MoveSpeed { get; set; }
+    public decimal Mileage { get; set; }
     public string Status { get; set; } = "active";
     public BuildingDto Building { get; set; }
     public List<FloorCallDto> FloorCalls { get; set; } = [];

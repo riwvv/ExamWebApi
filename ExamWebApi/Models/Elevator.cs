@@ -8,8 +8,9 @@ public class Elevator {
     public int MinFloor { get; set; }
     public int MaxFloor { get; set; }
     public int CurrentFloor { get; set; }
-    public string MoveStatus { get; set; } = "idle";
     public decimal MoveSpeed { get; set; }
+    public decimal Mileage { get; set; }
+    public string MoveStatus { get; set; } = "idle";
     public string Status { get; set; } = "active";
     public Guid BuildingId { get; set; }
     public Building Building { get; set; }

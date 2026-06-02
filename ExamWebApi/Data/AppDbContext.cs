@@ -32,6 +32,7 @@ public class AppDbContext : DbContext {
             entity.Property(x => x.CurrentFloor).IsRequired();
             entity.Property(x => x.MoveStatus).HasMaxLength(20).IsRequired();
             entity.Property(x => x.MoveSpeed).HasPrecision(18, 2).IsRequired();
+            entity.Property(x => x.Mileage).HasPrecision(18, 2);
             entity.Property(x => x.Status).HasMaxLength(11).IsRequired();
 
             entity.HasMany(x => x.FloorCalls).WithOne(c => c.Elevator).HasForeignKey(c => c.ElevatorId).OnDelete(DeleteBehavior.Cascade);
