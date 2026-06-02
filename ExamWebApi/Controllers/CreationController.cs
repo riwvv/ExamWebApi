@@ -16,7 +16,7 @@ public class CreationController(CreateBuildingService _buildingService, CreateEl
     }
 
     [HttpPost("elevator")]
-    public async Task<ActionResult<Elevator>> CreateElevator([FromBody] ElevatorDto elevator) {
+    public async Task<ActionResult<ElevatorAnaliticResponseDto>> CreateElevator([FromBody] ElevatorDto elevator) {
         var result = await _elevatorService.CreateNewElevatorAsync(elevator);
 
         return result == null ? BadRequest("Не удалось добавить новый лифт") : Ok(result);

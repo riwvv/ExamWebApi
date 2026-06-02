@@ -29,6 +29,8 @@ public class AppDbContext : DbContext {
             entity.Property(x => x.ProductionDate).IsRequired();
             entity.Property(x => x.MinFloor).IsRequired();
             entity.Property(x => x.MaxFloor).IsRequired();
+            entity.Property(x => x.CurrentFloor).IsRequired();
+            entity.Property(x => x.MoveStatus).HasMaxLength(20).IsRequired();
             entity.Property(x => x.MoveSpeed).HasPrecision(18, 2).IsRequired();
             entity.Property(x => x.Status).HasMaxLength(11).IsRequired();
 

@@ -30,7 +30,7 @@ public class DataController(AppDbContext _context) : ControllerBase {
         .ToListAsync());
 
     [HttpGet("elevator")]
-    public async Task<ActionResult<IEnumerable<Building>>> GetElevators() => Ok(await _context.Elevators
+    public async Task<ActionResult<IEnumerable<ElevatorAnaliticResponseDto>>> GetElevators() => Ok(await _context.Elevators
         .Include(x => x.Building)
         .Include(x => x.FloorCalls)
         .Include(x => x.TripLogs)
@@ -40,6 +40,8 @@ public class DataController(AppDbContext _context) : ControllerBase {
             ProductionDate = x.ProductionDate,
             MinFloor = x.MinFloor,
             MaxFloor = x.MaxFloor,
+            CurrentFloor = x.CurrentFloor,
+            MoveStatus = x.MoveStatus,
             MoveSpeed = x.MoveSpeed,
             Status = x.Status,
             Building = new BuildingDto {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ExamWebApi.Services;
 
 public class CreateElevatorService(AppDbContext _context, ILogger<CreateElevatorService> _logger) {
-    public async Task<Elevator?> CreateNewElevatorAsync(ElevatorDto elevator) {
+    public async Task<ElevatorAnaliticResponseDto?> CreateNewElevatorAsync(ElevatorDto elevator) {
         if (elevator == null) {
             _logger.LogWarning("Получен пустой объект при создании лифта");
             return null;
@@ -31,6 +31,8 @@ public class CreateElevatorService(AppDbContext _context, ILogger<CreateElevator
                 ProductionDate = DateTime.Now,
                 MinFloor = elevator.MinFloor,
                 MaxFloor = elevator.MaxFloor,
+                CurrentFloor = elevator.CurrentFloor,
+                MoveStatus = elevator.MoveStatus,
                 MoveSpeed = elevator.MoveSpeed,
                 Status = elevator.Status,
                 Building = building
@@ -41,7 +43,23 @@ public class CreateElevatorService(AppDbContext _context, ILogger<CreateElevator
 
             _logger.LogInformation("Создание нового лифта прошло успешно");
 
-            return newElevator;
+            var response = new ElevatorAnaliticResponseDto {
+                SerialNumber = newElevator.SerialNumber,
+                ModelID = newElevator.ModelID,
+                ProductionDate = newElevator.ProductionDate,
+                MinFloor = newElevator.MinFloor,
+                MaxFloor = newElevator.MaxFloor,
+                CurrentFloor = newElevator.CurrentFloor,
+                MoveStatus = newElevator.MoveStatus,
+                MoveSpeed = newElevator.MoveSpeed,
+                Status = newElevator.Status,
+                Building = new BuildingDto {
+                    Adress = newElevator.Building.Adress,
+                    TotalFloors = newElevator.Building.TotalFloors
+                }
+            };
+
+            return response;
         }
         catch (Exception ex) {
             _logger.LogError(ex, "Ошибка при создании лифта");
