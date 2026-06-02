@@ -1,8 +1,6 @@
 ﻿using ExamWebApi.Data;
 using ExamWebApi.DTOs;
-using ExamWebApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExamWebApi.Controllers;
@@ -43,6 +41,7 @@ public class DataController(AppDbContext _context) : ControllerBase {
             CurrentFloor = x.CurrentFloor,
             MoveStatus = x.MoveStatus,
             MoveSpeed = x.MoveSpeed,
+            Mileage = x.Mileage,
             Status = x.Status,
             Building = new BuildingDto {
                 Adress = x.Building.Adress,

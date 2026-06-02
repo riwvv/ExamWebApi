@@ -55,7 +55,7 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
                     ElevatorId = result.SerialNumber
                 };
 
-                newFloorCall.Course = "stay";
+                newFloorCall.Course = dto.Direction;
                 newFloorCall.Timestamp = DateTime.Now;
                 newFloorCall.ElevatorId = result.SerialNumber;
                 newFloorCall.Elevator = await _context.Elevators.FindAsync(result.SerialNumber);
@@ -87,7 +87,7 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
                         ElevatorId = foundAbove.SerialNumber
                     };
 
-                    newFloorCall.Course = "down";
+                    newFloorCall.Course = dto.Direction;
                     newFloorCall.Timestamp = DateTime.Now;
                     newFloorCall.ElevatorId = foundAbove.SerialNumber;
                     newFloorCall.Elevator = await _context.Elevators.FindAsync(foundAbove.SerialNumber);
@@ -121,7 +121,7 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
                         ElevatorId = nearest.SerialNumber
                     };
 
-                    newFloorCall.Course = "down";
+                    newFloorCall.Course = dto.Direction;
                     newFloorCall.Timestamp = DateTime.Now;
                     newFloorCall.ElevatorId = nearest.SerialNumber;
                     newFloorCall.Elevator = await _context.Elevators.FindAsync(nearest.SerialNumber);
@@ -157,7 +157,7 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
                         ElevatorId = below.First()!.SerialNumber
                     };
 
-                    newFloorCall.Course = "up";
+                    newFloorCall.Course = dto.Direction;
                     newFloorCall.Timestamp = DateTime.Now;
                     newFloorCall.ElevatorId = foundBelow.SerialNumber;
                     newFloorCall.Elevator = await _context.Elevators.FindAsync(foundBelow.SerialNumber);
@@ -191,7 +191,7 @@ public class SearchElevatorService(AppDbContext _context, ILogger<SearchElevator
                         ElevatorId = nearest.SerialNumber
                     };
 
-                    newFloorCall.Course = "up";
+                    newFloorCall.Course = dto.Direction;
                     newFloorCall.Timestamp = DateTime.Now;
                     newFloorCall.ElevatorId = nearest.SerialNumber;
                     newFloorCall.Elevator = await _context.Elevators.FindAsync(nearest.SerialNumber);
