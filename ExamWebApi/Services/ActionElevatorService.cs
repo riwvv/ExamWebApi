@@ -24,6 +24,7 @@ public class ActionElevatorService(AppDbContext _context, ILogger<SearchElevator
 
 			var log1 = new TripLog {
 				Id = Guid.NewGuid(),
+				TripId = Guid.NewGuid(),
 				Description = $"Пользователь зашёл и нажал {target} этаж. Поездка началась {DateTime.Now.ToString("f")}.",
 				DistanceTraveled = Math.Abs(elevator.CurrentFloor - target) * 3,
 				TotalSeconds = Convert.ToInt32(Math.Abs(elevator.CurrentFloor - target) * 3 / elevator.MoveSpeed),
@@ -42,6 +43,7 @@ public class ActionElevatorService(AppDbContext _context, ILogger<SearchElevator
 
 			var log2 = new TripLog {
 				Id = Guid.NewGuid(),
+				TripId = log1.TripId,
 				Description = $"Поездка завершена {DateTime.Now.ToString("f")}.",
 				DistanceTraveled = log1.DistanceTraveled,
 				TotalSeconds = log1.TotalSeconds,

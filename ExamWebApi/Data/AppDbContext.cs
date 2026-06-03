@@ -54,6 +54,7 @@ public class AppDbContext : DbContext {
         modelBuilder.Entity<TripLog>(entity => {
             entity.HasKey(x => x.Id);
 
+            entity.Property(x => x.TripId).IsRequired();
             entity.Property(x => x.Description).HasMaxLength(200).IsRequired();
             entity.Property(x => x.DistanceTraveled).HasPrecision(18, 2).IsRequired();
             entity.Property(x => x.TotalSeconds).IsRequired();
