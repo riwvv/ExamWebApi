@@ -7,6 +7,7 @@ public static class AppExtensions {
         services.AddScoped<CreateBuildingService>();
         services.AddScoped<CreateElevatorService>();
         services.AddScoped<SearchElevatorService>();
+        services.AddScoped<ActionElevatorService>();
 
         return services;
     }
